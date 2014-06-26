@@ -5,23 +5,17 @@ NOTE - this example requires apache cassandra version > 2.0 and the cassandra-dr
 
 ## Scenario
 
-This is short demo which shows how to capture credit card transactions. The queries that will be used in this app will be 
+This is short demo which shows how to capture user interactions. The idea is that users use a variety of different apps and we want to track every interaction that they have each of these applications. We can then look at the interactions themselves as a group and see a count of each of the users views.
 
-Get all transactions for a user (within a certain time frame)
+e.g.
 
-Get all transactions by issuer 
+select * from user_interaction_counters where user_id = 'U1' and app = 'mobilefx';
 
-Get all transactions per minute within a certain time frame. 
-
-The balances will be updated every 10,000 transactions 
-
-Get the balance for a user of all transactions. 
-
-This demo shows how to use static columns, batching, paging and counters to implement these features.  
+select * from user_interactions where user_id = 'U1' and app = 'mobilefx';
 
 
 ## Schema Setup
-Note : This will drop the keyspace "datastax_tickdata_demo" and create a new one. All existing data will be lost. 
+Note : This will drop the keyspace "datastax_user_interactions_demo" and create a new one. All existing data will be lost. 
 
 The schema can be found in src/main/resources/cql/
 
