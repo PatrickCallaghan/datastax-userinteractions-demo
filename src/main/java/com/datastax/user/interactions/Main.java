@@ -102,7 +102,8 @@ public class Main {
 		System.exit(0);
 	}
 
-	private List<String> apps = Arrays.asList("mobilefx", "desktop ui", "tablet research", "iphone banking", "android banking",
+	private List<String> apps = Arrays.asList("mobilefx", "mobilefx", "mobilefx", "desktop ui", "tablet research", 
+			"tablet research", "iphone banking", "android banking",
 			"mobile trading");
 
 	private List<String> actions = Arrays.asList("tradeview", "news",
