@@ -29,7 +29,7 @@ public class Main {
 		this.date = new DateTime().minusDays(1).withTimeAtStartOfDay();
 
 		String contactPointsStr = PropertyHelper.getProperty("contactPoints", "localhost");
-		String noOfUsersStr = PropertyHelper.getProperty("noOfUsers", "10000");
+		String noOfUsersStr = PropertyHelper.getProperty("noOfUsers", "1000");
 		String noOfInteractionsStr = PropertyHelper.getProperty("noOfInteractions", "10");
 
 		UserInteractionDao dao = new UserInteractionDao(contactPointsStr.split(","));
