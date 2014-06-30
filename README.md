@@ -28,7 +28,7 @@ To create the a single node cluster with replication factor of 1 for standard lo
 
 To run the insert
 
-        mvn clean compile exec:java -Dexec.mainClass="com.datastax.user.interaction.Main" 
+        mvn clean compile exec:java -Dexec.mainClass="com.datastax.user.interactions.Main" 
 	
 To remove the tables and the schema, run the following.
 
