@@ -44,19 +44,26 @@ public class Main {
 		
 		int totalInteractions = noOfInteractions * noOfUsers;
 		
+		dao.printMetrics();
+		
 		for (int i = 0; i < totalInteractions; i++) {
 
 			dao.insertUserInteraction(createRandomUserInteraction(noOfUsers));
 
 			if (i > 0 && i % BATCH == 0) {
 				total += BATCH;
-				logger.info("Wrote " + total + " groups of interactions");				
+				logger.info("Wrote " + total + " groups of interactions");
+				dao.printMetrics();
 			}
 		}
+		
+		dao.printMetrics();
+		
 		timer.end();
 		logger.info("User Interaction Load took " + timer.getTimeTakenSeconds() + " secs.");
 
 	}
+	
 
 	private List<UserInteraction> createRandomUserInteraction(int noOfUsers) {
 				
