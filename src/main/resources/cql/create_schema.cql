@@ -19,5 +19,16 @@ count counter,
 PRIMARY KEY (user_id, app, action)
 );
 
+create table if not exists user_interaction_visits(
+visit_id uuid,
+interaction_time timestamp,
+action text,
+app text,
+PRIMARY KEY (visit_id, interaction_time, action)
+);
+
+
+
 truncate user_interactions;
 truncate user_interaction_counters;
+truncate user_interaction_visits;

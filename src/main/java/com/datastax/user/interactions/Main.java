@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -83,7 +84,9 @@ public class Main {
 			dateTime = new DateTime();
 		}		
 		
-		interactions.add(new UserInteraction(user,app, dateTime.toDate(), "login"));
+		UUID visitId = UUID.randomUUID();
+		
+		interactions.add(new UserInteraction(visitId, user,app, dateTime.toDate(), "login"));
 		
 		int items = new Double(Math.random() * 50).intValue() + 1;
 		
@@ -91,10 +94,10 @@ public class Main {
 			
 			dateTime = dateTime.plusSeconds(new Double(Math.random() * 60).intValue());			
 			String action = actions.get(new Double(Math.random() * actions.size()).intValue());			
-			interactions.add(new UserInteraction(user,app, dateTime.toDate(), action));
+			interactions.add(new UserInteraction(visitId, user,app, dateTime.toDate(), action));
 		}
 				
-		interactions.add(new UserInteraction(user,app, dateTime.toDate(), "logout"));		
+		interactions.add(new UserInteraction(visitId, user,app, dateTime.toDate(), "logout"));		
 		userDateMap.put(user, dateTime.toDate());
 		
 		return interactions;

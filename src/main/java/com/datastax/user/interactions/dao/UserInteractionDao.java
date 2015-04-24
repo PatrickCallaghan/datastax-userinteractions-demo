@@ -11,7 +11,6 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Timer;
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.ConsistencyLevel;
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.Metrics;
 import com.datastax.driver.core.PreparedStatement;
@@ -26,14 +25,21 @@ public class UserInteractionDao {
 	private DateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd");
 	private static String keyspaceName = "datastax_user_interactions_demo";
 	private static String userInteractionsTable = keyspaceName + ".user_interactions";
+	private static String userVisitTable = keyspaceName + ".user_interaction_visits";
 	private static String counterTable = keyspaceName + ".user_interaction_counters";
 
 	private static final String INSERT_INTO_USER_INTERACTION = "Insert into " + userInteractionsTable
 			+ " (user_id, app, time, action) values (?,?,?,?);";
 
+	private static final String INSERT_INTO_VISIT = "Insert into " + userVisitTable
+			+ " (visit_id, interaction_time, action, app) values (?,?,?,?);";
+	
 	private static final String UPDATE_COUNTER = "update " + counterTable + " "
 			+ " set count=count+1  where user_id = ? and app = ? and action=?;";
 
+	
+	
+	private PreparedStatement insertUserVisitStmt;
 	private PreparedStatement insertUserInteractionStmt;
 	private PreparedStatement updateCounter;
 
@@ -47,10 +53,8 @@ public class UserInteractionDao {
 		logger.info(keyspaceMetadata.exportAsString());
 
 		this.insertUserInteractionStmt = session.prepare(INSERT_INTO_USER_INTERACTION);
+		this.insertUserVisitStmt  = session.prepare(INSERT_INTO_VISIT);
 		this.updateCounter = session.prepare(UPDATE_COUNTER);
-
-		this.insertUserInteractionStmt.setConsistencyLevel(ConsistencyLevel.ALL);
-		this.updateCounter.setConsistencyLevel(ConsistencyLevel.ALL);
 	}
 
 	public void insertUserInteraction(List<UserInteraction> userInteractions) {
@@ -58,6 +62,9 @@ public class UserInteractionDao {
 		for (UserInteraction userInteraction : userInteractions) {
 			session.execute(this.insertUserInteractionStmt.bind(userInteraction.getUserId(), userInteraction.getApp(),
 					userInteraction.getTime(), userInteraction.getAction()));
+
+			session.execute(this.insertUserVisitStmt.bind(userInteraction.getVisitId(), 
+					userInteraction.getTime(), userInteraction.getAction(), userInteraction.getApp()));
 
 			session.execute(this.updateCounter.bind(userInteraction.getUserId(), userInteraction.getApp(),
 					userInteraction.getAction()));
